@@ -14,25 +14,20 @@ def make_new_student(first_name, last_name, github):
     query = """INSERT into Students values (?, ?, ?)"""
     DB.execute(query, (first_name, last_name, github))
     CONN.commit()
-    return "Successfully added student: %s %s"%(first_name, last_name)
+    return (first_name, last_name, github)
 
 def get_projects_by_title(title):
     query = """SELECT * FROM Projects WHERE title = ?"""
     DB.execute(query, (title,))
     row = DB.fetchone()
-    return """\
-ID number: %s
-title: %s
-Description: %s
-Grade: %s 
-"""%(row[0], row[1], row[2], row[3])
+    return (row[0], row[1], row[2], row[3])
 
 
-def add_projects_by_title(id, title, description, max_grade):
-    query = """INSERT into Projects values (?, ?, ?, ?)"""
-    DB.execute(query, (id, title, description, max_grade))
+def add_projects_by_title(title, description, max_grade):
+    query = """INSERT into Projects values (null, ?, ?, ?)"""
+    DB.execute(query, (title, description, max_grade))
     CONN.commit()
-    return "Successfully added project: %s %s %s %s"%(id, title, description, max_grade)
+    return (title, description, max_grade)
 
 def get_grade_by_project(title):
     query = """SELECT max_grade FROM Projects WHERE title = ?"""
@@ -50,10 +45,25 @@ def give_grade(student_github, project_title, grade):
 def get_all_grades(student_github):
     query = """SELECT student_github, project_title, grade FROM grades WHERE student_github=?"""
     DB.execute(query,(student_github,))
-    row = DB.fetchone()
-    return row
+    rows = DB.fetchall()
 
+    # [ ('joel', 'proj1', 'a'), ('joel', 'proj2', 'B')]
+    l = []
+    for row in rows:
+        l.append({'github': row[0], 'project_title': row[1], 'grade': row[2]})
+    # [ {'name': 'joel', 'proj': 'proj1', 'grade':'a'}, {}]               'grade': row[1]})
+    return l
 
+def get_student_info_by_project(project_title):
+    query = """SELECT first_name, last_name, github, grade 
+    FROM students JOIN grades ON (students.github = grades.student_github) 
+    WHERE project_title = ?"""
+    DB.execute(query, (project_title,))
+    rows = DB.fetchall()
+    l = []
+    for row in rows:
+        l.append({"first_name": row[0], "last_name": row[1], "grade": row[3]})
+    return l
 
 def connect_to_db():
     global DB, CONN
@@ -83,6 +93,8 @@ def main():
             give_grade(*args)
         elif command == "all_grades":
             get_all_grades(*args)
+        elif command == "get_student_info_by_project":
+            get_student_info_by_project(*args)
     
 
     CONN.close()

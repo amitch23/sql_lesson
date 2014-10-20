@@ -1,0 +1,23 @@
+<html>
+<body>
+<h1>Project: {{ title}}
+</h1>
+
+<h2> {{description}}</h2>
+<h2> The max grade you can get on this project is {{max_grade}}</h2>
+
+<ul>
+ {% for i in student_grades %}
+    <li><strong>First Name:</strong> {{ i['first_name'] }}
+    
+    <li><strong>Last Name:</strong> {{ i['last_name'] }}
+
+    <li><strong>Grade:</strong> {{ i['grade'] }}
+
+
+    {% endfor %}    
+</ul>
+
+
+</body>
+</html>

@@ -6,9 +6,20 @@
 
 <h2>Github: {{github}}</h2>
 
-<h2> Grades for all projects: {{grades}}</h2>
+<h2> Grades for all projects: </h2>
 
-<p>This student has shown extreme brilliance, despite a slow start.</p>
-<p>It is my recommendation that they be awarded with many wonderful things.</p>
+<h2>Grades</h2>
+<ul>
+    {% for i in grades %}
+    <li><strong>Github:</strong> {{ i['github'] }}
+    
+    <li><a href="/project?project={{ i['project_title']}}"> Project Title: {{ i['project_title']}}</a>        
+
+    <li><strong>Grade: </strong>{{ i['grade']}}    
+
+
+    {% endfor %}    
+</ul>
+
 </body>
 </html>
