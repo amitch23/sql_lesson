@@ -34,6 +34,24 @@ def add_projects_by_title(id, title, description, max_grade):
     CONN.commit()
     return "Successfully added project: %s %s %s %s"%(id, title, description, max_grade)
 
+def get_grade_by_project(title):
+    query = """SELECT max_grade FROM Projects WHERE title = ?"""
+    DB.execute(query, (title,))
+    row = DB.fetchone()
+    return row 
+
+
+def give_grade(student_github, project_title, grade):
+    query = """INSERT into Grades values (?, ?, ?)"""
+    DB.execute(query, (student_github, project_title, grade))
+    CONN.commit()
+    return "Successfully added grade: %s %s %s"%(student_github, project_title, grade)
+
+def get_all_grades(student_github):
+    query = """SELECT student_github, project_title, grade FROM grades WHERE student_github=?"""
+    DB.execute(query,(student_github,))
+    row = DB.fetchone()
+    return row
 
 
 
@@ -59,6 +77,13 @@ def main():
             get_projects_by_title(*args)
         elif command == "add_project":
             add_projects_by_title(*args)
+        elif command == "get_grade":
+            get_grade_by_project(*args)
+        elif command == "give_grade":
+            give_grade(*args)
+        elif command == "all_grades":
+            get_all_grades(*args)
+    
 
     CONN.close()
 
