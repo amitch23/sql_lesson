@@ -1,13 +1,11 @@
 <html>
-<head>
-    <title></title>
-</head>
 <body>
-<form action="/student">
-    <label for="github">Enter github id</label>
-    <input type="text" name="github"/>
-    <input type="submit">
-</form>
+<h1> New grade added for: {{github}}</h1>
+
+<h2>Project Title: {{title}} </h2>
+
+<h2> Grade: {{grade}} </h2>
+
 <h2> <a href="/gradestudentform"> Add new grade </a></h2>
 
 <h2> <a href="/newprojectform"> Add new project </a></h2>
@@ -15,5 +13,6 @@
 <h2> <a href="/newstudentform"> Add new student </a></h2>
 
 <h2> <a href="/"> Find student by github </a></h2>
+
 </body>
 </html>
